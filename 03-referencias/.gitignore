@@ -1,0 +1,5 @@
+# Mídia das referências não entra no git: só os .md (catálogo, análises, ONDE.md e _entrada/links.md).
+*
+!*/
+!*.md
+!.gitignore

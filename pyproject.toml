@@ -1,0 +1,62 @@
+# Bibliotecas Python do estúdio. O uv cria o .venv com o Python certo:
+#   uv sync                 → base (som, legenda, quadros, referências)
+#   uv sync --extra cpu     → base + IA de áudio (batidas e separação de voz) sem placa NVIDIA
+#   uv sync --extra gpu     → base + IA de áudio com placa NVIDIA (CUDA 12.8)
+# Rodar qualquer script: uv run scripts/<pasta>/<script>.py
+[project]
+name = "estudio-ia"
+version = "0.1.0"
+description = "Segundo cérebro e ferramentas de um estúdio de vídeo com IA"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.13",
+    "soundfile>=0.12",
+    "librosa>=0.10",
+    "pyloudnorm>=0.1.1",
+    "pedalboard>=0.9",
+    "mido>=1.3",
+    "faster-whisper>=1.1",
+    "pillow>=10.4",
+    "opencv-python-headless>=4.10",
+    "playwright>=1.48",
+    "yt-dlp>=2025.1.1",
+]
+
+[project.optional-dependencies]
+cpu = [
+    "torch>=2.6",
+    "torchaudio>=2.6",
+    "beat-this>=1.0",
+    "audio-separator[cpu]>=0.30",
+]
+gpu = [
+    "torch>=2.6",
+    "torchaudio>=2.6",
+    "beat-this>=1.0",
+    "audio-separator[gpu]>=0.30",
+]
+
+[tool.uv]
+package = false
+conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pytorch-cu128", extra = "gpu", marker = "sys_platform != 'darwin'" },
+]
+torchaudio = [
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pytorch-cu128", extra = "gpu", marker = "sys_platform != 'darwin'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

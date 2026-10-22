@@ -1,0 +1,36 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Ligação das skills (o instalador recria)
+.claude/skills
+
+# Mídia pesada: fica no disco ou no Drive, nunca no git
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.m4v
+*.avi
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.aep
+*.aep Logs/
+*.prproj
+*.psd
+*.zip
+04-projetos/*/render/
+04-projetos/*/motor/node_modules/
+node_modules/
+
+# Locais
+.ai-memory.local.toml
+.env
+*.log
+.DS_Store
+Thumbs.db

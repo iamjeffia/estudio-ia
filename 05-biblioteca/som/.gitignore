@@ -1,0 +1,4 @@
+# Áudio gerado ou trazido de fora não vai para o git: cada estúdio gera (sintetizar_sfx.py) ou nivela (nivelar.py) o seu.
+*
+!.gitignore
+!README.md

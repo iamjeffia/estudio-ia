@@ -1,0 +1,69 @@
+# Roda o instalador do zero em máquinas limpas do GitHub (Windows e Mac)
+# e confere o resultado. Também testa a instalação do ai-memory do roteiro 2.
+name: teste do instalador
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "setup/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "scripts/**"
+      - ".github/workflows/teste-instalador.yml"
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalador do Windows
+        shell: powershell
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File setup\instalar-windows.ps1
+      - name: ai-memory (roteiro 2)
+        shell: powershell
+        run: |
+          irm https://github.com/akitaonrails/ai-memory/releases/latest/download/install.ps1 | iex
+          $exe = "$env:LOCALAPPDATA\Programs\ai-memory\ai-memory.exe"
+          & $exe --version
+          & $exe setup --yes --agent claude-code --agent codex
+          Start-Sleep -Seconds 10
+          & $exe status
+      - name: Scripts
+        shell: powershell
+        run: |
+          uv run scripts/video/make_captions.py --autoteste
+          uv run scripts/video/cut_pauses.py --autoteste
+          uv run setup/conferir.py --estrito
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inventario-windows
+          path: 02-ferramentas/inventario.md
+
+  mac:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalador do Mac
+        run: bash setup/instalar-mac.sh
+      - name: ai-memory (roteiro 2)
+        run: |
+          curl -fsSL https://github.com/akitaonrails/ai-memory/releases/latest/download/install.sh | sh
+          ~/.local/bin/ai-memory --version
+          ~/.local/bin/ai-memory setup --yes --agent claude-code --agent codex
+          sleep 10
+          ~/.local/bin/ai-memory status
+      - name: Scripts
+        run: |
+          uv run scripts/video/make_captions.py --autoteste
+          uv run scripts/video/cut_pauses.py --autoteste
+          uv run setup/conferir.py --estrito
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inventario-mac
+          path: 02-ferramentas/inventario.md
