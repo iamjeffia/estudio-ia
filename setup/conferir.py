@@ -102,7 +102,7 @@ for nome, alvo in [("HyperFrames", "hyperframes"), ("Remotion", "remotion-best-p
                    ("Transições", "transitions-dev"), ("watch (assistir vídeo)", "watch"),
                    ("humanizer", "humanizer")]:
     achou = any((p / alvo).exists() for p in pastas_globais)
-    item("Skills", nome, achou, "ok" if achou else "npx skills add ... (veja setup/1-instalar.md)")
+    item("Skills", nome, achou, "ok" if achou else "npx skills add ... (veja setup/2-instalar.md)")
 
 # Motores de vídeo -------------------------------------------------------------
 cod, saida = rodar("claude", "mcp", "list", timeout=60) if shutil.which("claude") else (1, "")
@@ -126,9 +126,9 @@ item("Motores", "HyperFrames e Remotion", bool(shutil.which("npx")), "rodam por 
 # Segundo cérebro --------------------------------------------------------------
 perfil = RAIZ / "01-sobre-mim" / "perfil.md"
 perfil_ok = perfil.exists() and "PERFIL-EM-BRANCO" not in perfil.read_text(encoding="utf-8")
-item("Cérebro", "Perfil preenchido", perfil_ok, "ok" if perfil_ok else "roteiro 2 (setup/2-segundo-cerebro.md)")
+item("Cérebro", "Perfil preenchido", perfil_ok, "ok" if perfil_ok else "roteiro 1 (setup/1-segundo-cerebro.md)")
 marcador = RAIZ / ".ai-memory.toml"
-item("Cérebro", "Projeto no ai-memory", marcador.exists(), "ok" if marcador.exists() else "roteiro 2")
+item("Cérebro", "Projeto no ai-memory", marcador.exists(), "ok" if marcador.exists() else "roteiro 1")
 onde = (RAIZ / "03-referencias" / "ONDE.md").read_text(encoding="utf-8") if (RAIZ / "03-referencias" / "ONDE.md").exists() else ""
 item("Cérebro", "Pasta de referências", "AAAA-MM-DD" not in onde, "ok" if "AAAA-MM-DD" not in onde else "roteiro 3 (setup/3-referencias.md)")
 sfx = list((RAIZ / "05-biblioteca" / "som" / "sfx").rglob("*.wav"))

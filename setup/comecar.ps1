@@ -33,4 +33,4 @@ Write-Host ""
 Write-Host "Pronto. Agora abra a IA dentro do estúdio:" -ForegroundColor White
 Write-Host "   cd `"$destino`""
 Write-Host "   claude        (ou codex)"
-Write-Host "e cole o prompt 2 do README: siga o roteiro setup/2-segundo-cerebro.md até o fim."
+Write-Host "e cole o prompt 1 do README (o segundo cérebro): siga o roteiro setup/1-segundo-cerebro.md até o fim."

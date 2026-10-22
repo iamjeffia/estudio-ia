@@ -2,11 +2,11 @@
 
 > Data: 2026-10-22 · Tipo: entrada · Status: vigente
 
-**Resumo:** um modelo pronto para editar vídeo com IA. Você cola um prompt na sua IA (Claude Code ou Codex) e ela instala tudo: programas, bibliotecas de áudio e vídeo, skills de motion e de som, e os motores de edição (After Effects, EffectCraft, HyperFrames e Remotion). Depois, com mais dois prompts, ela monta o seu segundo cérebro e a sua pasta de referências.
+**Resumo:** um modelo pronto para editar vídeo com IA. São três prompts colados na sua IA (Claude Code ou Codex): o primeiro transforma uma pasta sua no seu segundo cérebro, o segundo instala tudo o que a edição precisa (programas, bibliotecas de áudio e vídeo, skills de motion e de som, e os motores After Effects, EffectCraft, HyperFrames e Remotion) e o terceiro cria a sua pasta de referências.
 
 ## O que vem dentro
 
-- **Instalação em um prompt** para Windows e Mac. O instalador pula o que você já tem e mostra quanto tempo levou cada etapa.
+- **Segundo cérebro e instalação, um prompt cada,** para Windows e Mac. O instalador pula o que você já tem e mostra quanto tempo levou cada etapa.
 - **Segundo cérebro organizado:** pastas para ideias, perfil, ferramentas, referências, projetos, biblioteca e método, com regras que o Claude Code e o Codex leem automaticamente.
 - **Memória entre sessões e entre IAs** com o [ai-memory](https://github.com/akitaonrails/ai-memory): o que você fez ontem no Claude Code, o Codex sabe hoje.
 - **Pasta de referências**, no computador ou no Google Drive: você joga tudo numa pasta e a IA organiza, cataloga e analisa.
@@ -16,15 +16,27 @@
 
 ## Como começar
 
-### Prompt 1: instalar tudo
+### Prompt 1: o segundo cérebro
 
-Abra o Claude Code ou o Codex e cole:
+Crie uma pasta nova onde você quer guardar o seu segundo cérebro (de preferência fora do OneDrive e do iCloud, e sem acento no nome), abra o Claude Code ou o Codex dentro dela e cole:
 
 ```text
-Quero montar meu estúdio de edição de vídeo com IA. Baixe o modelo de https://github.com/oldmoneygit/estudio-ia e siga o roteiro setup/1-instalar.md até o fim. Fale comigo em português simples, faça tudo sozinho e só me chame quando eu precisar fazer login ou digitar uma senha.
+Quero transformar esta pasta no meu segundo cérebro para vídeo com IA. Baixe o modelo de https://github.com/oldmoneygit/estudio-ia para dentro dela e siga o roteiro setup/1-segundo-cerebro.md até o fim. Fale comigo em português simples.
 ```
 
-**Ainda não tem nenhuma IA instalada?** Um comando faz o mesmo e já instala o Claude Code e o Codex:
+A IA baixa a estrutura, liga a memória e conversa com você por uns minutos para preencher o seu perfil. Leva de 5 a 10 minutos. Daqui em diante, abra a sua IA sempre dentro dessa pasta.
+
+### Prompt 2: as ferramentas de edição
+
+Na mesma pasta, cole:
+
+```text
+Siga o roteiro setup/2-instalar.md até o fim e deixe meu computador pronto para editar vídeo.
+```
+
+**Quanto demora:** de 10 a 20 minutos numa internet de 100 Mb/s (de 20 a 45 minutos numa de 30 Mb/s), e quase todo esse tempo é espera de download. São de 2 a 6 GB, conforme o computador tenha ou não placa NVIDIA. Deixe 15 GB livres. A IA só te chama se precisar de login ou senha.
+
+**Ainda não tem nenhuma IA instalada?** Um comando baixa o estúdio em `estudio-ia` na sua pasta pessoal e instala tudo, inclusive o Claude Code e o Codex. Depois é só abrir a IA nessa pasta e colar o prompt 1.
 
 - Windows (PowerShell):
 
@@ -37,18 +49,6 @@ Quero montar meu estúdio de edição de vídeo com IA. Baixe o modelo de https:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/oldmoneygit/estudio-ia/main/setup/comecar.sh | bash
   ```
-
-**Quanto demora:** de 10 a 20 minutos numa internet de 100 Mb/s (de 20 a 45 minutos numa de 30 Mb/s), e quase todo esse tempo é espera de download. São de 2 a 6 GB, conforme o computador tenha ou não placa NVIDIA. Deixe 15 GB livres.
-
-### Prompt 2: o segundo cérebro
-
-Abra a IA dentro da pasta `estudio-ia` e cole:
-
-```text
-Siga o roteiro setup/2-segundo-cerebro.md até o fim.
-```
-
-A IA instala a memória, conversa com você por uns minutos para preencher o seu perfil e atualiza os docs das ferramentas. Leva de 5 a 10 minutos.
 
 ### Prompt 3: as referências
 
@@ -80,7 +80,7 @@ Peça o primeiro vídeo: "vamos fazer um vídeo sobre <assunto>". A IA segue o [
 ## Conferir e atualizar
 
 - Ver o que está instalado: `uv run setup/conferir.py` (gera `02-ferramentas/inventario.md`).
-- Atualizar o modelo sem perder o que é seu: `git pull modelo main` (o roteiro 2 dá esse nome ao remoto).
+- Atualizar o modelo sem perder o que é seu: `git pull modelo main` (o roteiro 1 dá esse nome ao remoto).
 - Rodar o instalador de novo é seguro: ele só instala o que falta.
 
 ## Requisitos

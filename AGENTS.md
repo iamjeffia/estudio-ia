@@ -8,8 +8,8 @@
 
 Se `01-sobre-mim/perfil.md` ainda estiver com o modelo em branco, o setup não terminou. Siga, nesta ordem, os roteiros de `setup/`:
 
-1. [setup/1-instalar.md](setup/1-instalar.md): programas e bibliotecas.
-2. [setup/2-segundo-cerebro.md](setup/2-segundo-cerebro.md): memória (ai-memory), perfil e docs das ferramentas.
+1. [setup/1-segundo-cerebro.md](setup/1-segundo-cerebro.md): baixa o modelo para esta pasta, liga a memória (ai-memory) e preenche o perfil.
+2. [setup/2-instalar.md](setup/2-instalar.md): programas, bibliotecas, skills e motores de edição, e os docs das ferramentas.
 3. [setup/3-referencias.md](setup/3-referencias.md): pasta de referências, local ou no Google Drive.
 
 ## Como trabalhar com o dono do estúdio
@@ -49,4 +49,4 @@ Se `01-sobre-mim/perfil.md` ainda estiver com o modelo em branco, o setup não t
 
 ## Memória
 
-A memória entre sessões e entre agentes (Claude Code e Codex) é o **ai-memory**, ligado pelo roteiro 2. Fatos duráveis, regras aprendidas e decisões vão para ele. Não guarde fatos do projeto na memória nativa de um agente só: o outro não a enxerga. O próprio setup acrescenta o bloco de instruções do ai-memory ao fim deste arquivo.
+A memória entre sessões e entre agentes (Claude Code e Codex) é o **ai-memory**, ligado pelo roteiro 1. Fatos duráveis, regras aprendidas e decisões vão para ele. Não guarde fatos do projeto na memória nativa de um agente só: o outro não a enxerga. O próprio setup acrescenta o bloco de instruções do ai-memory ao fim deste arquivo.

@@ -2,7 +2,7 @@
 
 > Data: AAAA-MM-DD · Tipo: entrada · Status: rascunho
 
-**Resumo:** quem é você, o que cria e como fala. A IA preenche este arquivo numa conversa rápida durante o roteiro 2 (`setup/2-segundo-cerebro.md`) e o consulta antes de produzir qualquer coisa.
+**Resumo:** quem é você, o que cria e como fala. A IA preenche este arquivo numa conversa rápida durante o roteiro 1 (`setup/1-segundo-cerebro.md`) e o consulta antes de produzir qualquer coisa.
 
 <!-- Enquanto este marcador existir, o setup do segundo cérebro não terminou. -->
 <!-- PERFIL-EM-BRANCO -->

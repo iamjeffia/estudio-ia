@@ -1,5 +1,6 @@
-# Roda o instalador do zero em máquinas limpas do GitHub (Windows e Mac)
-# e confere o resultado. Também testa a instalação do ai-memory do roteiro 2.
+# Testa a ordem do README em máquinas limpas do GitHub (Windows e Mac):
+# a pessoa já tem a IA, cria uma pasta, o roteiro 1 baixa o modelo para dentro
+# dela e liga a memória, e o roteiro 2 instala as ferramentas nessa mesma pasta.
 name: teste do instalador
 
 on:
@@ -21,76 +22,129 @@ jobs:
       run:
         shell: powershell
     steps:
-      - uses: actions/checkout@v5
-      - name: Instalador do Windows
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File setup\instalar-windows.ps1
-      - name: ai-memory (roteiro 2)
+      - name: A pessoa já tem a IA (Claude Code)
         run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://claude.ai/install.ps1 | iex"
+          "$HOME\.local\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Roteiro 1 — modelo baixado numa pasta nova (com um arquivo da pessoa dentro)
+        run: |
+          New-Item -ItemType Directory -Force "$HOME\meu-estudio" | Out-Null
+          Set-Location "$HOME\meu-estudio"
+          "minhas ideias" | Out-File notas.txt -Encoding utf8
+          git init -b main
+          git remote add modelo https://github.com/oldmoneygit/estudio-ia
+          git fetch modelo main
+          git checkout -B main --track modelo/main
+          if ($LASTEXITCODE) { exit 1 }
+          if (-not (Test-Path AGENTS.md) -or -not (Test-Path setup\2-instalar.md) -or -not (Test-Path notas.txt)) { "faltou arquivo"; exit 1 }
+          git remote -v
+      - name: Roteiro 1 — ai-memory
+        run: |
+          Set-Location "$HOME\meu-estudio"
           irm https://github.com/akitaonrails/ai-memory/releases/latest/download/install.ps1 | iex
           $exe = "$env:LOCALAPPDATA\Programs\ai-memory\ai-memory.exe"
-          & $exe --version
-          & $exe setup --yes --agent claude-code --agent codex
+          & $exe setup --yes --agent claude-code
+          "workspace = `"default`"`nproject = `"teste-estudio`"" | Out-File .ai-memory.toml -Encoding utf8
+          & $exe install-instructions --target AGENTS.md
+          if (-not (Select-String -Path AGENTS.md -Pattern 'ai-memory:start' -Quiet)) { "bloco do ai-memory não entrou"; exit 1 }
           Start-Sleep -Seconds 10
           & $exe status
+      - name: Roteiro 2 — instalador na pasta do estúdio
+        run: |
+          Set-Location "$HOME\meu-estudio"
+          powershell -NoProfile -ExecutionPolicy Bypass -File setup\instalar-windows.ps1
+      - name: Roteiro 2 — memória no Codex instalado agora
+        run: |
+          $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+          Set-Location "$HOME\meu-estudio"
+          & "$env:LOCALAPPDATA\Programs\ai-memory\ai-memory.exe" setup --yes --agent codex
+          if ($LASTEXITCODE) { exit 1 }
       - name: Batidas (depende do servidor do beat_this; queda dele vira aviso)
         continue-on-error: true
         run: |
           $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
-          ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
+          Set-Location "$HOME\meu-estudio"
+          ffmpeg -v error -y -f lavfi -i "aevalsrc='0.8*exp(-30*mod(t\,0.5))*sin(2*PI*60*t)':d=15" teste.wav
           uv run scripts/som/batida.py teste.wav
           if ($LASTEXITCODE) { exit 1 }
       - name: Separação de voz
         run: |
           $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
-          if (-not (Test-Path teste.wav)) { ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav }
+          Set-Location "$HOME\meu-estudio"
+          if (-not (Test-Path teste.wav)) { ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" teste.wav }
           uv run scripts/som/separar.py teste.wav --saida separado
           if ($LASTEXITCODE) { exit 1 }
           Get-ChildItem separado -Recurse -Filter *.wav | ForEach-Object { $_.FullName }
-      - name: Scripts
+      - name: Scripts e conferência
         run: |
           $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+          Set-Location "$HOME\meu-estudio"
           uv run scripts/video/make_captions.py --autoteste
           if ($LASTEXITCODE) { exit 1 }
           uv run scripts/video/cut_pauses.py --autoteste
           if ($LASTEXITCODE) { exit 1 }
           uv run setup/conferir.py --estrito
+          if ($LASTEXITCODE) { exit 1 }
+          Copy-Item 02-ferramentas\inventario.md $env:GITHUB_WORKSPACE\inventario.md
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: inventario-windows
-          path: 02-ferramentas/inventario.md
+          path: inventario.md
 
   mac:
     runs-on: macos-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v5
-      - name: Instalador do Mac
-        run: bash setup/instalar-mac.sh
-      - name: ai-memory (roteiro 2)
+      - name: A pessoa já tem a IA (Claude Code)
         run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Roteiro 1 — modelo baixado numa pasta nova (com um arquivo da pessoa dentro)
+        run: |
+          mkdir -p ~/meu-estudio && cd ~/meu-estudio
+          echo "minhas ideias" > notas.txt
+          git init -b main
+          git remote add modelo https://github.com/oldmoneygit/estudio-ia
+          git fetch modelo main
+          git checkout -B main --track modelo/main
+          test -f AGENTS.md && test -f setup/2-instalar.md && test -f notas.txt
+          git remote -v
+      - name: Roteiro 1 — ai-memory
+        run: |
+          cd ~/meu-estudio
           curl -fsSL https://github.com/akitaonrails/ai-memory/releases/latest/download/install.sh | sh
-          ~/.local/bin/ai-memory --version
-          ~/.local/bin/ai-memory setup --yes --agent claude-code --agent codex
+          ~/.local/bin/ai-memory setup --yes --agent claude-code
+          printf 'workspace = "default"\nproject = "teste-estudio"\n' > .ai-memory.toml
+          ~/.local/bin/ai-memory install-instructions --target AGENTS.md
+          grep -q "ai-memory:start" AGENTS.md
           sleep 10
           ~/.local/bin/ai-memory status
+      - name: Roteiro 2 — instalador na pasta do estúdio
+        run: cd ~/meu-estudio && bash setup/instalar-mac.sh
+      - name: Roteiro 2 — memória no Codex instalado agora
+        run: cd ~/meu-estudio && ~/.local/bin/ai-memory setup --yes --agent codex
       - name: Batidas (depende do servidor do beat_this; queda dele vira aviso)
         continue-on-error: true
         run: |
-          ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
+          cd ~/meu-estudio
+          ffmpeg -v error -y -f lavfi -i "aevalsrc='0.8*exp(-30*mod(t\,0.5))*sin(2*PI*60*t)':d=15" teste.wav
           uv run scripts/som/batida.py teste.wav
       - name: Separação de voz
         run: |
-          [ -f teste.wav ] || ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
+          cd ~/meu-estudio
+          [ -f teste.wav ] || ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" teste.wav
           uv run scripts/som/separar.py teste.wav --saida separado
           find separado -name '*.wav'
-      - name: Scripts
+      - name: Scripts e conferência
         run: |
+          cd ~/meu-estudio
           uv run scripts/video/make_captions.py --autoteste
           uv run scripts/video/cut_pauses.py --autoteste
           uv run setup/conferir.py --estrito
+          cp 02-ferramentas/inventario.md "$GITHUB_WORKSPACE/inventario.md"
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: inventario-mac
-          path: 02-ferramentas/inventario.md
+          path: inventario.md

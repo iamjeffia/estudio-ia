@@ -1,8 +1,8 @@
-# Roteiro 1: instalar tudo
+# Roteiro 2: instalar as ferramentas de edição
 
 > Data: 2026-10-22 · Tipo: guia · Status: vigente
 
-**Resumo:** instruções para a IA (Claude Code ou Codex) deixar o computador pronto para editar vídeo com IA: programas, bibliotecas Python de áudio e vídeo, skills e motores (EffectCraft, HyperFrames, Remotion e, se houver, After Effects). Pronto quando `uv run setup/conferir.py` disser "Essencial pronto".
+**Resumo:** instruções para a IA (Claude Code ou Codex) deixar o computador pronto para editar vídeo com IA: programas, bibliotecas Python de áudio e vídeo, skills e motores (EffectCraft, HyperFrames, Remotion e, se houver, After Effects). Vem depois do roteiro 1 (o segundo cérebro). Pronto quando `uv run setup/conferir.py` disser "Essencial pronto" e os docs de `02-ferramentas/` estiverem com as versões desta máquina.
 
 ## Para a IA: como conduzir
 
@@ -10,12 +10,7 @@ Quem colou o prompt pode não ser técnico. Fale em português simples, execute 
 
 ### 0. A pasta do estúdio
 
-Se você ainda não está dentro do repositório `estudio-ia`, clone-o na pasta pessoal do usuário, fora do OneDrive e do iCloud (a pasta `.venv` é pesada e trava a sincronização):
-
-- Windows: `git clone https://github.com/oldmoneygit/estudio-ia "$HOME\estudio-ia"`
-- Mac: `git clone https://github.com/oldmoneygit/estudio-ia ~/estudio-ia`
-
-Sem `git` no Windows, baixe o zip (`https://github.com/oldmoneygit/estudio-ia/archive/refs/heads/main.zip`), extraia-o nesse mesmo lugar e continue; o Git fica por conta do instalador. Se o nome da pasta do usuário tiver acento, "ç" ou espaço, use `C:\estudio-ia` (alguns renderizadores quebram com esses caracteres). Depois, trabalhe sempre de dentro dessa pasta.
+Trabalhe na pasta do segundo cérebro (a que tem o `AGENTS.md` e a pasta `setup/` deste modelo). Se ela ainda não existe, faça antes o passo 1 do roteiro 1 (`setup/1-segundo-cerebro.md`), que baixa o modelo para a pasta aberta, e depois volte aqui.
 
 ### 1. Avise o tempo antes de começar
 
@@ -67,9 +62,20 @@ Resolva antes de seguir. Caminhos alternativos:
 | `npx skills add` falha | rode sozinho o comando que falhou para ver o erro; em rede com proxy, configure o npm |
 | EffectCraft não baixa | baixe o zip portátil em `https://github.com/storytold/effectcraft/releases/latest` e extraia em `%LOCALAPPDATA%\Programs\EffectCraft` (Mac: `~/Applications/EffectCraft`), depois rode o instalador de novo |
 
-### 4. Termine
+### 4. Ligue a memória no agente novo
 
-1. Rode `uv run setup/conferir.py` e mostre o resumo à pessoa.
+O roteiro 1 ligou o ai-memory só à IA que estava rodando. Se o instalador acabou de instalar o Codex (ou o Claude Code), ligue-o também: `ai-memory setup --yes --agent codex` (ou `--agent claude-code`), com o mesmo cuidado do roteiro 1 se estiver dentro do app Claude no Windows. No Codex, a pessoa aprova os ganchos uma vez com `/hooks`.
+
+### 5. Atualize os docs das ferramentas
+
+1. `uv run setup/conferir.py` atualiza `02-ferramentas/inventario.md`.
+2. Em cada doc de `02-ferramentas/` cuja ferramenta está instalada, acrescente no **Log** a versão e o caminho reais desta máquina (veja no inventário) e a data de hoje. Nos docs de ferramentas que não estão instaladas, mude o status para `não instalado`.
+3. Se a pessoa usa alguma ferramenta que não tem doc (outro editor, banco de imagens, conta de voz), crie o doc seguindo o modelo do `02-ferramentas/_LEIA.md`. Nunca escreva chave, senha ou token: registre só onde cada um está guardado.
+
+### 6. Termine
+
+1. Mostre à pessoa o resumo do `conferir.py` e o tempo total que o instalador mostrou.
 2. Se ela ainda não fez login no Claude Code ou no Codex, diga como.
-3. Diga o tempo total que o instalador mostrou.
-4. Próximo passo: o roteiro 2, `setup/2-segundo-cerebro.md`. Se esta sessão começou antes da instalação das skills, peça para a pessoa fechar a IA e abri-la de novo dentro da pasta do estúdio; só então siga.
+3. Commit local (`git add -A && git commit -m "Ferramentas de edição instaladas"`) e anotação da sessão.
+4. Peça para a pessoa fechar a IA e abri-la de novo dentro da pasta do estúdio: as skills e os servidores MCP novos só aparecem numa sessão nova.
+5. Próximo passo: o roteiro 3, `setup/3-referencias.md`.

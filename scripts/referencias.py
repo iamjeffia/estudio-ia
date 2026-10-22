@@ -92,7 +92,7 @@ def sonda(caminho: Path) -> dict:
             capture_output=True, text=True, encoding="utf-8", errors="replace",
         )
     except FileNotFoundError:
-        sys.exit("erro: não achei o ffprobe no PATH. Instale o ffmpeg (roteiro setup/1-instalar.md).")
+        sys.exit("erro: não achei o ffprobe no PATH. Instale o ffmpeg (roteiro setup/2-instalar.md).")
     if out.returncode != 0:
         return {}
     dados = json.loads(out.stdout or "{}")

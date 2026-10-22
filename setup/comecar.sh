@@ -21,4 +21,4 @@ bash "$DESTINO/setup/instalar-mac.sh" </dev/tty
 echo
 echo "Pronto. Agora abra a IA dentro do estúdio:"
 echo "   cd ~/estudio-ia && claude        (ou codex)"
-echo "e cole o prompt 2 do README: siga o roteiro setup/2-segundo-cerebro.md até o fim."
+echo "e cole o prompt 1 do README (o segundo cérebro): siga o roteiro setup/1-segundo-cerebro.md até o fim."

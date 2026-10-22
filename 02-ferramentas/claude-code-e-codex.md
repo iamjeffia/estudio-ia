@@ -10,5 +10,5 @@
 - **Comandos mais usados:**
   - `claude mcp list` / `codex mcp list`: ver as ferramentas ligadas (EffectCraft, After Effects, ai-memory).
   - `ai-memory run codex`: abre o Codex já com o contexto da última sessão do Claude Code (e vice-versa).
-- **Pegadinhas:** sessão aberta antes de instalar uma skill ou um MCP não enxerga a novidade: feche e abra de novo. No Windows, o app Claude para desktop roda isolado; instaladores de serviço (como o `ai-memory setup`) precisam rodar fora dele (ver roteiro 2).
+- **Pegadinhas:** sessão aberta antes de instalar uma skill ou um MCP não enxerga a novidade: feche e abra de novo. No Windows, o app Claude para desktop roda isolado; instaladores de serviço (como o `ai-memory setup`) precisam rodar fora dele (ver roteiro 1).
 - **Log:**
