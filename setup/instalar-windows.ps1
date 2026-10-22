@@ -159,15 +159,17 @@ if ($SemEffectCraft) {
     else {
         try {
             Write-Host "   ... baixando a última versão (GitHub storytold/effectcraft)"
-            $rel = Invoke-RestMethod 'https://api.github.com/repos/storytold/effectcraft/releases/latest' -Headers @{ 'User-Agent' = 'estudio-ia' }
-            $asset = $rel.assets | Where-Object { $_.name -like '*windows-x64-portable.zip' } | Select-Object -First 1
-            $zip = Join-Path $env:TEMP $asset.name
-            Invoke-WebRequest $asset.browser_download_url -OutFile $zip
+            # o link de "última versão" redireciona para a tag (sem o limite de consultas da API do GitHub)
+            $pagina = Invoke-WebRequest 'https://github.com/storytold/effectcraft/releases/latest' -UseBasicParsing -Method Head
+            $tag = ($pagina.BaseResponse.ResponseUri.AbsoluteUri -split '/')[-1]
+            $nome = "effectcraft-$($tag.TrimStart('v'))-windows-x64-portable.zip"
+            $zip = Join-Path $env:TEMP $nome
+            Invoke-WebRequest "https://github.com/storytold/effectcraft/releases/download/$tag/$nome" -OutFile $zip -UseBasicParsing
             New-Item -ItemType Directory -Force $ecPasta | Out-Null
             Expand-Archive $zip -DestinationPath $ecPasta -Force
             Remove-Item $zip -Force
             $ecCli = Get-ChildItem -Path $ecPasta -Filter 'effectcraft-cli.exe' -Recurse | Select-Object -First 1
-            if ($ecCli) { Ok "EffectCraft $($rel.tag_name) em $ecPasta" } else { Aviso "zip baixado, mas o effectcraft-cli.exe não apareceu" }
+            if ($ecCli) { Ok "EffectCraft $tag em $ecPasta" } else { Aviso "zip baixado, mas o effectcraft-cli.exe não apareceu" }
         } catch { Aviso "não consegui baixar o EffectCraft: $($_.Exception.Message)" }
     }
     if ($ecCli) {
