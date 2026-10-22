@@ -18,26 +18,36 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Instalador do Windows
         shell: powershell
         run: powershell -NoProfile -ExecutionPolicy Bypass -File setup\instalar-windows.ps1
       - name: ai-memory (roteiro 2)
         shell: powershell
         run: |
+          $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
           irm https://github.com/akitaonrails/ai-memory/releases/latest/download/install.ps1 | iex
           $exe = "$env:LOCALAPPDATA\Programs\ai-memory\ai-memory.exe"
           & $exe --version
           & $exe setup --yes --agent claude-code --agent codex
           Start-Sleep -Seconds 10
           & $exe status
+      - name: IA de áudio (batida e separação de voz)
+        shell: powershell
+        run: |
+          $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+          ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
+          uv run scripts/som/batida.py teste.wav
+          uv run scripts/som/separar.py teste.wav --saida separado
+          Get-ChildItem separado -Recurse -Filter *.wav | ForEach-Object { $_.FullName }
       - name: Scripts
         shell: powershell
         run: |
+          $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
           uv run scripts/video/make_captions.py --autoteste
           uv run scripts/video/cut_pauses.py --autoteste
           uv run setup/conferir.py --estrito
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: inventario-windows
@@ -47,7 +57,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Instalador do Mac
         run: bash setup/instalar-mac.sh
       - name: ai-memory (roteiro 2)
@@ -57,12 +67,18 @@ jobs:
           ~/.local/bin/ai-memory setup --yes --agent claude-code --agent codex
           sleep 10
           ~/.local/bin/ai-memory status
+      - name: IA de áudio (batida e separação de voz)
+        run: |
+          ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
+          uv run scripts/som/batida.py teste.wav
+          uv run scripts/som/separar.py teste.wav --saida separado
+          find separado -name '*.wav'
       - name: Scripts
         run: |
           uv run scripts/video/make_captions.py --autoteste
           uv run scripts/video/cut_pauses.py --autoteste
           uv run setup/conferir.py --estrito
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: inventario-mac

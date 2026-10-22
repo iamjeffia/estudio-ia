@@ -149,7 +149,9 @@ if ((Tem 'uv') -and (Test-Path $sintetizar)) {
 # 6. EffectCraft -------------------------------------------------------------
 Passo "6. EffectCraft"
 $ecPasta = Join-Path $env:LOCALAPPDATA 'Programs\EffectCraft'
-$ecCli = Get-ChildItem -Path @($ecPasta, "$env:ProgramFiles\EffectCraft") -Filter 'effectcraft-cli.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+# só procura em pastas que existem: com pasta inexistente, o -Recurse do PowerShell varre a pasta de cima inteira
+$ecPastas = @($ecPasta, "$env:ProgramFiles\EffectCraft") | Where-Object { Test-Path $_ }
+$ecCli = if ($ecPastas) { Get-ChildItem -Path $ecPastas -Filter 'effectcraft-cli.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 } else { $null }
 if ($SemEffectCraft) {
     Ok "pulado (-SemEffectCraft)"
 } else {
@@ -184,7 +186,9 @@ if ($SemEffectCraft) {
 
 # 7. After Effects -----------------------------------------------------------
 Passo "7. After Effects"
-$ae = Get-ChildItem "$env:ProgramFiles\Adobe" -Filter 'AfterFX.exe' -Recurse -ErrorAction SilentlyContinue | Sort-Object FullName -Descending | Select-Object -First 1
+$ae = Get-ChildItem "$env:ProgramFiles\Adobe" -Directory -Filter 'Adobe After Effects*' -ErrorAction SilentlyContinue |
+    ForEach-Object { Join-Path $_.FullName 'Support Files\AfterFX.exe' } | Where-Object { Test-Path $_ } |
+    Sort-Object -Descending | Select-Object -First 1 | ForEach-Object { Get-Item $_ }
 if ($ae) {
     Ok "After Effects encontrado: $($ae.Directory.Parent.Name)"
     $kit = Join-Path $env:LOCALAPPDATA 'MotionKitAE'

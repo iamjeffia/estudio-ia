@@ -32,6 +32,8 @@ Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ Comma
 
 Espere uns 20 segundos e confira com `ai-memory status` (a saída deve dizer que o servidor está respondendo). Se o `setup` terminar com linhas `problem:`, mostre-as à pessoa; não tente contornar o problema editando configurações à mão.
 
+**Codex: aprovar os ganchos uma vez.** O Codex não executa ganchos novos sem permissão, e o `setup` avisa que os ganchos do ai-memory ainda não foram aprovados. Peça para a pessoa abrir o `codex` na pasta do estúdio, digitar `/hooks` e aprovar os ganchos do ai-memory. Sem isso, o Codex lê a memória, mas não grava as sessões dele.
+
 ### 2. Dê um nome ao projeto na memória
 
 Pergunte o nome ou apelido da pessoa (vai servir para o perfil também) e crie o `.ai-memory.toml` na raiz:
