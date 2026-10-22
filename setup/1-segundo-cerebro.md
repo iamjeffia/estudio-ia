@@ -20,7 +20,7 @@ A pasta do estúdio é a pasta em que a IA foi aberta. Se ela já tem o `AGENTS.
 
    ```
    git init -b main
-   git remote add modelo https://github.com/oldmoneygit/estudio-ia
+   git remote add modelo https://github.com/iamjeffia/estudio-ia
    git fetch modelo main
    git checkout -B main --track modelo/main
    ```

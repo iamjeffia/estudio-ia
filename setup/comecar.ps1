@@ -1,5 +1,5 @@
 ﻿# Um comando para começar do zero no Windows (PowerShell):
-#   irm https://raw.githubusercontent.com/oldmoneygit/estudio-ia/main/setup/comecar.ps1 | iex
+#   irm https://raw.githubusercontent.com/iamjeffia/estudio-ia/main/setup/comecar.ps1 | iex
 # Instala o Git, baixa o estúdio em $HOME\estudio-ia (ou C:\estudio-ia se o nome
 # do usuário tiver acento ou espaço) e roda o instalador completo.
 $ErrorActionPreference = 'Continue'
@@ -22,7 +22,7 @@ if (Test-Path (Join-Path $destino '.git')) {
     Write-Host "O estúdio já existe em $destino; atualizando"
     git -C $destino pull --ff-only
 } else {
-    git clone https://github.com/oldmoneygit/estudio-ia $destino
+    git clone https://github.com/iamjeffia/estudio-ia $destino
 }
 if (-not (Test-Path (Join-Path $destino 'setup\instalar-windows.ps1'))) {
     Write-Host "Não consegui baixar o estúdio. Confira a internet e rode o comando de novo." -ForegroundColor Red

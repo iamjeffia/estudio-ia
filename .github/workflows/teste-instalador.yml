@@ -32,7 +32,7 @@ jobs:
           Set-Location "$HOME\meu-estudio"
           "minhas ideias" | Out-File notas.txt -Encoding utf8
           git init -b main
-          git remote add modelo https://github.com/oldmoneygit/estudio-ia
+          git remote add modelo https://github.com/iamjeffia/estudio-ia
           git fetch modelo main
           git checkout -B main --track modelo/main
           if ($LASTEXITCODE) { exit 1 }
@@ -105,7 +105,7 @@ jobs:
           mkdir -p ~/meu-estudio && cd ~/meu-estudio
           echo "minhas ideias" > notas.txt
           git init -b main
-          git remote add modelo https://github.com/oldmoneygit/estudio-ia
+          git remote add modelo https://github.com/iamjeffia/estudio-ia
           git fetch modelo main
           git checkout -B main --track modelo/main
           test -f AGENTS.md && test -f setup/2-instalar.md && test -f notas.txt

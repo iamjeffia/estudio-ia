@@ -21,7 +21,7 @@
 Crie uma pasta nova onde você quer guardar o seu segundo cérebro (de preferência fora do OneDrive e do iCloud, e sem acento no nome), abra o Claude Code ou o Codex dentro dela e cole:
 
 ```text
-Quero transformar esta pasta no meu segundo cérebro para vídeo com IA. Baixe o modelo de https://github.com/oldmoneygit/estudio-ia para dentro dela e siga o roteiro setup/1-segundo-cerebro.md até o fim. Fale comigo em português simples.
+Quero transformar esta pasta no meu segundo cérebro para vídeo com IA. Baixe o modelo de https://github.com/iamjeffia/estudio-ia para dentro dela e siga o roteiro setup/1-segundo-cerebro.md até o fim. Fale comigo em português simples.
 ```
 
 A IA baixa a estrutura, liga a memória e conversa com você por uns minutos para preencher o seu perfil. Leva de 5 a 10 minutos. Daqui em diante, abra a sua IA sempre dentro dessa pasta.
@@ -41,13 +41,13 @@ Siga o roteiro setup/2-instalar.md até o fim e deixe meu computador pronto para
 - Windows (PowerShell):
 
   ```powershell
-  irm https://raw.githubusercontent.com/oldmoneygit/estudio-ia/main/setup/comecar.ps1 | iex
+  irm https://raw.githubusercontent.com/iamjeffia/estudio-ia/main/setup/comecar.ps1 | iex
   ```
 
 - Mac (Terminal):
 
   ```bash
-  curl -fsSL https://raw.githubusercontent.com/oldmoneygit/estudio-ia/main/setup/comecar.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/iamjeffia/estudio-ia/main/setup/comecar.sh | bash
   ```
 
 ### Prompt 3: as referências
