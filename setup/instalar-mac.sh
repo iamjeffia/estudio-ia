@@ -116,9 +116,11 @@ else
   if [ -n "$EC_CLI" ]; then ok "EffectCraft já instalado"
   else
     echo "   ... baixando a última versão (GitHub storytold/effectcraft)"
-    API="https://api.github.com/repos/storytold/effectcraft/releases/latest"
-    URL_CLI="$(curl -fsSL "$API" | grep -o '"browser_download_url": *"[^"]*cli[^"]*macos-universal.zip"' | head -1 | sed 's/.*"\(https[^"]*\)"/\1/')"
-    URL_APP="$(curl -fsSL "$API" | grep -o '"browser_download_url": *"[^"]*macos-universal.dmg"' | head -1 | sed 's/.*"\(https[^"]*\)"/\1/')"
+    # o link de "última versão" redireciona para a tag (sem o limite de consultas da API do GitHub)
+    TAG="$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/storytold/effectcraft/releases/latest | sed 's#.*/##')"
+    VER="${TAG#v}"; BASE="https://github.com/storytold/effectcraft/releases/download/$TAG"
+    URL_CLI=""; URL_APP=""
+    if [ -n "$VER" ]; then URL_CLI="$BASE/effectcraft-cli-$VER-macos-universal.zip"; URL_APP="$BASE/effectcraft-$VER-macos-universal.dmg"; fi
     mkdir -p "$EC_DIR"
     if [ -n "$URL_CLI" ]; then
       curl -fsSL "$URL_CLI" -o /tmp/effectcraft-cli.zip && unzip -oq /tmp/effectcraft-cli.zip -d "$EC_DIR" && rm -f /tmp/effectcraft-cli.zip
