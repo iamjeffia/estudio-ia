@@ -23,5 +23,5 @@
 | torch, beat_this | achar as batidas e os tempos fortes da música (extra `cpu`/`gpu`) |
 | audio-separator | separar voz e instrumental (modelos RoFormer; extra `cpu`/`gpu`) |
 
-- **Pegadinhas:** biblioteca nova entra no `pyproject.toml` e depois `uv sync`; nunca `pip install` solto. Sem placa NVIDIA, separar uma música de 3 min pode levar alguns minutos.
+- **Pegadinhas:** biblioteca nova entra no `pyproject.toml` e depois `uv sync`; nunca `pip install` solto. Sem placa NVIDIA, a separação de voz é lenta: no teste de 22/10/2026, numa máquina de 4 núcleos, 15 s de música levaram ~3 min. Separe só o trecho que vai usar, não a música inteira. Com placa NVIDIA, leva segundos. O primeiro uso baixa o modelo (~1,5 GB) e o de batidas (pequeno); depois ficam guardados.
 - **Log:**

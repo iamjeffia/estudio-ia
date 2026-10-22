@@ -12,7 +12,7 @@ Uso:
   uv run scripts/som/batida.py musica.mp3 --fps 30 --json grade.json
   uv run scripts/som/batida.py musica.mp3 --video render.mp4    # confere os cortes do render contra a grade
 """
-import argparse, json, re, subprocess, sys, tempfile
+import argparse, json, re, subprocess, sys, tempfile, time
 from pathlib import Path
 
 import numpy as np
@@ -38,7 +38,18 @@ def batidas_ia(path, device=None):
     with tempfile.TemporaryDirectory() as tmp:      # decodifica com o ffmpeg: qualquer formato entra
         wav = Path(tmp) / "trilha.wav"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(path), "-ac", "1", "-ar", "44100", str(wav)], check=True)
-        f2b = File2Beats(checkpoint_path="final0", device=device, dbn=False)
+        f2b = None
+        for tentativa in range(5):          # o modelo baixa de um servidor da universidade no 1º uso, que às vezes cai (503)
+            try:
+                f2b = File2Beats(checkpoint_path="final0", device=device, dbn=False)
+                break
+            except Exception as e:  # noqa: BLE001
+                espera = 15 * (tentativa + 1)
+                print(f"  não consegui baixar o modelo de batidas ({str(e)[:80]}); tentando de novo em {espera} s", file=sys.stderr)
+                time.sleep(espera)
+        if f2b is None:
+            raise SystemExit("O servidor do modelo de batidas (beat_this) não respondeu. É temporário: rode de novo daqui a alguns minutos.\n"
+                             "Depois do primeiro download, o modelo fica guardado e não depende mais do servidor.")
         b, d = f2b(str(wav))
     return np.asarray(b, float), np.asarray(d, float), device
 

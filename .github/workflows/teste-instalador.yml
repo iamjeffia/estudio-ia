@@ -38,14 +38,18 @@ jobs:
           $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
           ffmpeg -v error -y -f lavfi -i "sine=frequency=220:duration=15" -f lavfi -i "anoisesrc=d=15:a=0.05" -filter_complex "amix=inputs=2" teste.wav
           uv run scripts/som/batida.py teste.wav
+          if ($LASTEXITCODE) { exit 1 }
           uv run scripts/som/separar.py teste.wav --saida separado
+          if ($LASTEXITCODE) { exit 1 }
           Get-ChildItem separado -Recurse -Filter *.wav | ForEach-Object { $_.FullName }
       - name: Scripts
         shell: powershell
         run: |
           $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User') + ";$env:LOCALAPPDATA\Microsoft\WinGet\Links"
           uv run scripts/video/make_captions.py --autoteste
+          if ($LASTEXITCODE) { exit 1 }
           uv run scripts/video/cut_pauses.py --autoteste
+          if ($LASTEXITCODE) { exit 1 }
           uv run setup/conferir.py --estrito
       - uses: actions/upload-artifact@v5
         if: always()

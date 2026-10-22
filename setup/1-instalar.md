@@ -30,6 +30,8 @@ Conte à pessoa, antes de rodar, quanto vai demorar e quanto vai baixar:
 | Skills, navegador de render e EffectCraft | ~400 MB | 1 a 2 min | 3 a 5 min |
 | **Total típico** | **2 a 6 GB** | **10 a 20 min** | **20 a 45 min** |
 
+Medido em 22/10/2026 em máquinas limpas do GitHub (internet de datacenter, bem mais rápida que a de casa): o instalador inteiro levou 2 min 53 s no Windows e 2 min 27 s no Mac. Em casa, a diferença é quase toda o tempo de download da tabela.
+
 Espaço livre recomendado: 15 GB. Os modelos de separação de voz (~1,5 GB) só baixam no primeiro uso.
 
 ### 2. Rode o instalador
