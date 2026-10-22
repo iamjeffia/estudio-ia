@@ -48,8 +48,15 @@ def batidas_ia(path, device=None):
                 print(f"  não consegui baixar o modelo de batidas ({str(e)[:80]}); tentando de novo em {espera} s", file=sys.stderr)
                 time.sleep(espera)
         if f2b is None:
-            raise SystemExit("O servidor do modelo de batidas (beat_this) não respondeu. É temporário: rode de novo daqui a alguns minutos.\n"
-                             "Depois do primeiro download, o modelo fica guardado e não depende mais do servidor.")
+            # plano B: librosa (já instalada). Menos preciso, e o tempo forte é estimado de 4 em 4 batidas
+            import librosa
+            print("  AVISO: o servidor do modelo de batidas (beat_this) não respondeu; usando a librosa, que é aproximada.\n"
+                  "  Rode de novo mais tarde para o resultado preciso: depois do primeiro download, o modelo fica guardado.",
+                  file=sys.stderr)
+            y, sr = librosa.load(str(wav), sr=22050, mono=True)
+            _, quadros = librosa.beat.beat_track(y=y, sr=sr)
+            b = librosa.frames_to_time(quadros, sr=sr)
+            return np.asarray(b, float), np.asarray(b[::4], float), "librosa (aproximado)"
         b, d = f2b(str(wav))
     return np.asarray(b, float), np.asarray(d, float), device
 
@@ -82,6 +89,8 @@ def main():
         raise SystemExit(f"não achei {trilha}")
 
     batidas, fortes, device = batidas_ia(trilha, a.device)
+    if len(batidas) < 2:
+        raise SystemExit(f"Nenhuma batida encontrada em {trilha.name}: o áudio não tem ritmo marcado (voz sozinha, tom, ruído).")
     if len(batidas) < 4:
         raise SystemExit("o beat_this achou menos de 4 batidas: a faixa tem batida marcada?")
     y = carrega(trilha)
@@ -117,7 +126,7 @@ def main():
     out = {"trilha": str(trilha), "duracao": dur, "bpm": bpm, "tempo_s": 60 / bpm, "tempos_por_compasso": tempos,
            "fps": a.fps, "batidas": batidas.tolist(), "tempos_fortes": fortes.tolist(),
            "batidas_quadro": [q(x) for x in batidas], "tempos_fortes_quadro": [q(x) for x in fortes], "drop": drop,
-           "modelo": "beat_this final0"}
+           "modelo": modelo}
     if a.video:
         cs = cortes_video(a.video)
         tol = 2.0 / a.fps
