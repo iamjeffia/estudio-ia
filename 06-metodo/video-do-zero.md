@@ -24,6 +24,8 @@
 
 6. **Identidade visual do vídeo.** Cada vídeo ganha fonte, cores, ícones, componentes e transição tirados do assunto. Falou de uma marca forte? O vídeo veste a marca: tipografia, cores e elementos dela. Assunto sem identidade forte? Use uma base limpa (UI clara, estilo Apple) e reserve uma cor de destaque. Mudou de assunto no meio do vídeo? Faça uma transição e troque a identidade junto.
 
+   **Direções em quadros antes de animar.** Para o gancho e para o corpo do vídeo, a IA junta pelo menos 10 referências numa prancha (do `03-referencias/`, do Pinterest, de templates de motion) e propõe **3 direções de verdade em quadros parados**, nas mesmas 3 cenas, para a comparação ser justa. Cada direção tem nome, uma frase de conceito e um elemento diferente que costura as cenas. Você escolhe uma, mistura duas ou pede outra rodada com mais pesquisa. A escolha vai para o [escolhas.md](escolhas.md): o que estava na mesa, o que ganhou e por quê. Na próxima vez, a IA começa pelas regras que saíram dali.
+
 7. **Trilha e sound design** (skill `som-do-video`). Música real escolhida por momentos (abertura suave, respiro antes do drop, clímax), um efeito sonoro para cada elemento que entra ou sai, com o som do que se vê (clique é clique, arrastar é deslize). O som pode sair dos eventos da animação pelo `scripts/som/som.py`, sem esperar o render final.
 
 8. **Montagem e motion.** Escolha o motor pelo tipo de peça (skill `estudio-video`):
