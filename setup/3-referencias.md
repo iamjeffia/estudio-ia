@@ -33,7 +33,7 @@ As análises e o `catalogo.md` ficam sempre na pasta do estúdio, versionados. S
    - Mac: `~/Library/CloudStorage/GoogleDrive-<conta>/My Drive/Estudio IA/referencias`
 4. Preencha o `03-referencias/ONDE.md`: data, `Status: vigente`, `Modo: google-drive` e o **caminho absoluto** no `Caminho da mídia`.
 5. Rode `uv run scripts/referencias.py criar` e confira se as pastas apareceram no Drive.
-6. Ensine o atalho do celular: no Instagram, no TikTok ou no YouTube, "Compartilhar → Drive → Estudio IA/referencias/_entrada". Outra opção é colar o link num arquivo `links.md`.
+6. Ensine o atalho do celular: no Instagram, no TikTok ou no YouTube, "Compartilhar → Drive → Estudio IA/referencias/_entrada". Quando o celular salva o link como arquivo de texto (`.txt`, `.url`, `.webloc`), o `novos` lê o endereço, baixa o vídeo e guarda o arquivo lido em `_entrada/_lidos/`. No computador, também dá para colar o link no `03-referencias/_entrada/links.md`.
 
 ### 3. Traga o que a pessoa já tem
 
@@ -41,7 +41,7 @@ Pergunte se ela já guarda referências em algum lugar (Downloads, uma pasta sol
 
 ### 4. Faça uma rodada de organização como teste
 
-1. `uv run scripts/referencias.py novos` lista o que está em `_entrada/` e baixa os links de `03-referencias/_entrada/links.md`.
+1. `uv run scripts/referencias.py novos` lista o que está em `_entrada/`, lê os links que chegaram em arquivo de texto e baixa os links de `03-referencias/_entrada/links.md`.
 2. Para cada vídeo, `uv run scripts/referencias.py olhar <arquivo>` gera a folha de contato; abra a imagem e veja o que há no vídeo. Para entender o áudio ou o vídeo inteiro, use a skill `watch`.
 3. Classifique e mova: `uv run scripts/referencias.py mover <arquivo> <categoria> --tags "..." --nota "o que tem de bom" --origem <link>`.
 4. Se não houver nada para organizar, faça o teste com um arquivo qualquer (um print da tela, por exemplo) e apague-o depois.

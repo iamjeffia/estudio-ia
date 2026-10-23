@@ -11,8 +11,10 @@ catálogo, as análises e a lista de links ficam SEMPRE no repositório:
   <mídia>/<categoria>/                arquivos organizados (motion, som, design, anuncios, marcas, fotos)
 
 Comandos:
-  novos                       lista o que está em <mídia>/_entrada/ (tipo, tamanho, duração, resolução) e
-                              baixa com o yt-dlp cada link pendente de _entrada/links.md, marcando a linha
+  novos                       lista o que está em <mídia>/_entrada/ (tipo, tamanho, duração, resolução), lê os
+                              links que chegaram em arquivo de texto (.txt, .url, .webloc, .md; o arquivo vai
+                              para _entrada/_lidos/) e baixa com o yt-dlp cada link pendente de
+                              _entrada/links.md, marcando a linha
   olhar <arquivo>             vídeo/GIF: gera uma folha de contato (quadros com o tempo) e mostra o caminho;
                               imagem ou áudio: mostra as informações
   mover <arquivo> <categoria> renomeia para AAAA-MM-DD-assunto.ext, move para <mídia>/<categoria>/ e
@@ -226,8 +228,40 @@ def origem_no_links(nome_arquivo: str) -> str | None:
 
 # ---------- comandos ----------
 
+def links_da_entrada() -> int:
+    """Link compartilhado pelo celular chega na _entrada/ como arquivo de texto (.txt, .url, .webloc, .md).
+    Passa os endereços para o links.md (sem repetir) e guarda o arquivo lido em _entrada/_lidos/."""
+    pasta = entrada_midia()
+    if not pasta.exists():
+        return 0
+    ja = LINKS.read_text(encoding="utf-8")
+    novos = []
+    for f in sorted(pasta.iterdir(), key=lambda f: f.name.lower()):
+        if not f.is_file() or f.name.lower() == "links.md" or f.suffix.lower() not in (".txt", ".url", ".webloc", ".md"):
+            continue
+        if f.stat().st_size > 64_000:
+            continue
+        urls = [m.group(0).rstrip(".,;<\"'") for m in URL.finditer(f.read_text(encoding="utf-8", errors="replace"))]
+        if not urls:
+            continue
+        for u in urls:
+            if u not in ja and u not in novos:
+                novos.append(u)
+        lidos = pasta / "_lidos"
+        lidos.mkdir(exist_ok=True)
+        shutil.move(str(f), str(lidos / f.name))
+        print(f"  link lido de {f.name} (o arquivo foi para _entrada/_lidos/)")
+    if novos:
+        with LINKS.open("a", encoding="utf-8", newline="\n") as arq:
+            if not ja.endswith("\n"):
+                arq.write("\n")
+            arq.write("".join(f"{u}\n" for u in novos))
+    return len(novos)
+
+
 def cmd_novos(a):
     garante_links()
+    links_da_entrada()
     linhas = LINKS.read_text(encoding="utf-8").splitlines(keepends=True)
     pendentes = links_pendentes(linhas)
     if pendentes and not a.sem_baixar:
