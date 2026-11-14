@@ -2,7 +2,7 @@
 
 > Data: 2026-10-22 · Tipo: entrada · Status: vigente
 
-**Resumo:** um modelo pronto para editar vídeo com IA. São três prompts colados na sua IA (Claude Code ou Codex): o primeiro transforma uma pasta sua no seu segundo cérebro, o segundo instala tudo o que a edição precisa (programas, bibliotecas de áudio e vídeo, skills de motion e de som, e os motores After Effects, EffectCraft, HyperFrames e Remotion) e o terceiro cria a sua pasta de referências.
+**Resumo:** um modelo pronto para editar vídeo com IA. São quatro prompts colados na sua IA (Claude Code ou Codex): o primeiro transforma uma pasta sua no seu segundo cérebro, o segundo instala tudo o que a edição precisa (programas, bibliotecas de áudio e vídeo, skills de motion e de som, e os motores After Effects, EffectCraft, HyperFrames e Remotion), o terceiro cria a sua pasta de referências e o quarto faz o primeiro vídeo, recriando um que já existe.
 
 ## O que vem dentro
 
@@ -58,9 +58,19 @@ Siga o roteiro setup/3-referencias.md até o fim.
 
 Você escolhe se a pasta fica no computador ou no Google Drive, e a IA cria as categorias e faz uma rodada de organização como teste.
 
+### Prompt 4: o primeiro vídeo, recriando um que já existe
+
+Escolha um vídeo de motion feito por um motion designer humano (YouTube, Instagram ou um projeto aberto do [Clube do Motion](https://clubedomotion.com)), copie o link e cole, trocando `[LINK]`:
+
+```text
+Baixe o vídeo deste link e assista com a skill watch, quadro a quadro em todos os trechos com movimento: [LINK]. Documente no segundo cérebro tudo o que precisa para recriá-lo do zero: o contexto, a transcrição (se tiver fala) e cada animação isolada, com o movimento de câmera, as transições, os elementos, os efeitos sonoros, as cores e a tipografia. Depois, recrie o vídeo no After Effects, cena por cena, e me mostre o original e a recriação lado a lado em câmera lenta.
+```
+
+A IA segue o [roteiro 4](setup/4-recriar.md): assiste quadro a quadro, documenta, recria cena por cena e compara em câmera lenta. Onde não ficou igual, você aponta e ela mede de novo e corrige. **Insista no FRAME A FRAME:** a IA perde essa instrução com frequência; cobre até ela assistir do jeito certo. Cada acerto fica salvo no seu segundo cérebro.
+
 ### Depois disso
 
-Peça o primeiro vídeo: "vamos fazer um vídeo sobre <assunto>". A IA segue o [passo a passo](06-metodo/video-do-zero.md), abre um projeto em `04-projetos/` e vai marcando cada etapa.
+Peça um vídeo seu: "vamos fazer um vídeo sobre <assunto>". A IA segue o [passo a passo](06-metodo/video-do-zero.md), abre um projeto em `04-projetos/` e vai marcando cada etapa.
 
 ## As pastas
 
@@ -75,7 +85,7 @@ Peça o primeiro vídeo: "vamos fazer um vídeo sobre <assunto>". A IA segue o [
 | `06-metodo/` | Passo a passo, números que valem e aprendizados |
 | `scripts/` | Scripts de som, vídeo e referências |
 | `anotacoes/` | O registro de cada sessão |
-| `setup/` | Instaladores e os três roteiros |
+| `setup/` | Instaladores e os quatro roteiros |
 
 ## Conferir e atualizar
 

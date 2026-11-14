@@ -12,6 +12,8 @@ Se `01-sobre-mim/perfil.md` ainda estiver com o modelo em branco, o setup não t
 2. [setup/2-instalar.md](setup/2-instalar.md): programas, bibliotecas, skills e motores de edição, e os docs das ferramentas.
 3. [setup/3-referencias.md](setup/3-referencias.md): pasta de referências, local ou no Google Drive.
 
+Depois do setup, quando a pessoa pedir para **recriar um vídeo** (o prompt "Baixe o vídeo deste link e assista com a skill watch…"), siga [setup/4-recriar.md](setup/4-recriar.md).
+
 ## Como trabalhar com o dono do estúdio
 
 1. **Combine o "pronto" antes de começar.** Se o pedido não diz quando a tarefa termina, pergunte uma vez, no início, com opções concretas. Depois disso, resolva sozinho o que conseguir resolver.
